@@ -61,16 +61,19 @@ func _on_Deck_clicked():
 	
 	if deck.size() == 0:
 		print("deck is empty")
-		card_back.hide()
 	else:
-		draw_card()
+		#draw_card()
+		rpc("draw_card")
 	
-func draw_card():
+remotesync func draw_card():
 	if hand.get_card_count() >= hand.max_size:
 		print("Hand is full")
-		return
+		return		
 
 	var c = deck.pop_front()
+	if deck.size() == 0:
+		card_back.hide()
+	
 	var card_index = hand.get_card_count()
 
 	var hand_card_spacing = 10.0
@@ -82,7 +85,10 @@ func draw_card():
 	
 	hand.add_card(c)
 	
-func toggle_select_card(card):
+remotesync func toggle_select_card(card_index: int):
+	print("toggle select", card_index)
+	var card = hand.cards[card_index]
+	
 	if selected_card == card:
 		selected_card.selected = false
 		selected_card.update()
@@ -97,10 +103,14 @@ func toggle_select_card(card):
 	selected_card.selected = true
 	selected_card.update()
 		
-func play_card(card, card_place):
+remotesync func play_card(card_index: int, card_place_index: int):
+	var card = hand.cards[card_index]
+	var card_place = get_card_place_from_index(card_place_index)
+	
+	selected_card = null
 	hand.remove_card(card)
 	card.selected = false
-	board.append(card)
+	board[card_place_index] = card
 	card.rect_position = card_place.rect_position
 	card.update()
 	
@@ -116,7 +126,7 @@ func _on_Card_clicked(card):
 		return
 	
 	if hand.has_card(card):
-		toggle_select_card(card)
+		rpc("toggle_select_card", hand.cards.find(card))
 
 func _on_CardPlace_gui_input(event, card_place_index):
 	if not interaction_enabled:
@@ -124,8 +134,7 @@ func _on_CardPlace_gui_input(event, card_place_index):
 	
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		if selected_card != null:
-			var card_place = get_card_place_from_index(card_place_index)
-			play_card(selected_card, card_place)
+			rpc("play_card", hand.cards.find(selected_card), card_place_index)
 			selected_card = null
 
 func _on_EndTurnButton_pressed():
