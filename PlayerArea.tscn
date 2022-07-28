@@ -1,0 +1,97 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://PlayerArea.gd" type="Script" id=1]
+[ext_resource path="res://font/NotoSerifJP-Bold.otf" type="DynamicFontData" id=2]
+
+[sub_resource type="StyleBoxFlat" id=3]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.968627, 0.988235, 0.980392, 0.372549 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="DynamicFont" id=4]
+size = 24
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 24
+outline_size = 1
+outline_color = Color( 0.180392, 0.215686, 0.188235, 0.458824 )
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 2 )
+
+[node name="PlayerArea" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="CardPlace0" type="Panel" parent="."]
+margin_left = 316.0
+margin_right = 436.0
+margin_bottom = 160.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardPlace1" type="Panel" parent="."]
+margin_left = 492.0
+margin_right = 612.0
+margin_bottom = 160.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardPlace2" type="Panel" parent="."]
+margin_left = 668.0
+margin_right = 788.0
+margin_bottom = 160.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardPlace3" type="Panel" parent="."]
+margin_left = 844.0
+margin_right = 964.0
+margin_bottom = 160.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="DeckPlace" type="Panel" parent="."]
+visible = false
+margin_left = 1096.0
+margin_top = 96.0
+margin_right = 1216.0
+margin_bottom = 256.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="GraveyardPlace" type="Panel" parent="."]
+visible = false
+margin_left = 64.0
+margin_top = 96.0
+margin_right = 184.0
+margin_bottom = 256.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="HandPlace" type="Position2D" parent="."]
+position = Vector2( 320, 192 )
+
+[node name="EndTurnButton" type="Button" parent="."]
+margin_left = 128.0
+margin_right = 247.0
+margin_bottom = 41.0
+custom_fonts/font = SubResource( 4 )
+text = "End turn"
+
+[node name="HPLabel" type="Label" parent="."]
+margin_left = 128.0
+margin_top = 64.0
+margin_right = 168.0
+margin_bottom = 99.0
+custom_fonts/font = SubResource( 5 )
+text = "20"
+
+[connection signal="gui_input" from="CardPlace0" to="." method="_on_CardPlace_gui_input" binds= [ 0 ]]
+[connection signal="gui_input" from="CardPlace1" to="." method="_on_CardPlace_gui_input" binds= [ 1 ]]
+[connection signal="gui_input" from="CardPlace2" to="." method="_on_CardPlace_gui_input" binds= [ 2 ]]
+[connection signal="gui_input" from="CardPlace3" to="." method="_on_CardPlace_gui_input" binds= [ 3 ]]
+[connection signal="pressed" from="EndTurnButton" to="." method="_on_EndTurnButton_pressed"]
